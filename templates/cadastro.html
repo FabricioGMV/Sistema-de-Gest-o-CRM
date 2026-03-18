@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cadastro de Cliente</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 40px; background-color: #f4f4f9; }
+        .container { max-width: 500px; background: white; padding: 20px; border-radius: 8px; box-shadow: 0 0 10px rgba(0,0,0,0.1); margin: auto; }
+        input { width: 100%; padding: 8px; margin: 8px 0 15px 0; box-sizing: border-box; }
+        button { background-color: #28a745; color: white; padding: 10px 15px; border: none; border-radius: 4px; cursor: pointer; width: 100%; font-size: 16px; }
+        button:hover { background-color: #218838; }
+        .alert { padding: 10px; margin-bottom: 15px; border-radius: 4px; }
+        .success { background-color: #d4edda; color: #155724; }
+        .error { background-color: #f8d7da; color: #721c24; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h2>Cadastrar Novo Cliente</h2>
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            {% for category, message in messages %}
+                <div class="alert {{ category }}">{{ message }}</div>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+
+    <form action="/cadastrar" method="POST">
+        <label>Nome Completo *</label> <input type="text" name="nome" required>
+        <label>CPF *</label> <input type="text" name="cpf" required> 
+        <label>CNPJ *</label> <input type="text" name="cnpj" required> 
+        <label>Telefone Principal *</label> <input type="text" name="telefone" required> 
+        <label>E-mail</label> <input type="email" name="email">
+        <label>CEP</label> <input type="text" name="cep">
+
+        <button type="submit">Salvar Cliente</button>
+    </form>
+</div>
+
+</body>
+</html>
