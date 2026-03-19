@@ -6,12 +6,10 @@ cliente_blueprint = Blueprint('cliente', __name__)
 
 @cliente_blueprint.route('/')
 def index():
-    # Retorna a View (HTML)
     return render_template('cadastro.html')
 
 @cliente_blueprint.route('/cadastrar', methods=['POST'])
 def cadastrar():
-    # Coleta dados da View
     dados = request.form
     novo_cliente = Cliente(
         nome=dados.get('nome'),
@@ -28,6 +26,6 @@ def cadastrar():
         flash("Cliente cadastrado com sucesso!", "success")
     except IntegrityError:
         db.session.rollback()
-        flash("Erro: CPF ou CNPJ já cadastrado (RN01).", "error")
+        flash("Erro: CPF ou CNPJ já cadastrado.", "error")
     
     return redirect(url_for('cliente.index'))
