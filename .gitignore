@@ -1,0 +1,26 @@
+# Ambiente Virtual (NUNCA suba essa pasta!)
+venv/
+ENV/
+env/
+
+# Cache do Python
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Configurações do VS Code
+.vscode/
+
+# Arquivos de Sistema
+Thumbs.db
+.DS_Store
+
+# Logs
+*.log
+
+# Banco de dados local (se fosse SQLite, mas bom deixar aqui)
+*.db
+*.sqlite3
+
+# Arquivos de variáveis de ambiente (onde ficam as senhas)
+.env
