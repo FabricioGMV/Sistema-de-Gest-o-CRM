@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CRM | Tipos de Serviço</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root { --primary-color: #2563eb; --bg-color: #f8fafc; --card-bg: #ffffff; --text-main: #1e293b; --border-color: #e2e8f0; }
+        body { font-family: 'Inter', sans-serif; background-color: var(--bg-color); color: var(--text-main); margin: 0; padding: 20px; }
+        .container { max-width: 1100px; margin: 0 auto; background: var(--card-bg); padding: 30px; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+        header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; border-bottom: 2px solid var(--border-color); padding-bottom: 20px; }
+        .btn { padding: 10px 20px; border-radius: 8px; border: none; cursor: pointer; font-weight: 600; display: inline-flex; align-items: center; gap: 8px; text-decoration: none; transition: 0.2s; }
+        .btn-primary { background-color: var(--primary-color); color: white; }
+        .btn-success { background-color: #16a34a; color: white; }
+        .btn-outline { border: 1px solid var(--border-color); background: white; color: #64748b; }
+        table { width: 100%; border-collapse: collapse; }
+        th { background-color: #f1f5f9; text-align: left; padding: 15px; color: #64748b; font-size: 0.8rem; text-transform: uppercase; }
+        td { padding: 15px; border-bottom: 1px solid var(--border-color); }
+        .action-link { color: var(--primary-color); text-decoration: none; font-weight: 600; margin-right: 12px; }
+        .action-link-danger { color: #dc2626; text-decoration: none; font-weight: 600; }
+        .prazo-badge { background: #eff6ff; color: var(--primary-color); padding: 3px 10px; border-radius: 20px; font-size: 0.82rem; font-weight: 600; }
+        .flash-success { background: #dcfce7; color: #166534; padding: 12px 16px; border-radius: 8px; margin-bottom: 16px; }
+        .flash-error   { background: #fee2e2; color: #991b1b; padding: 12px 16px; border-radius: 8px; margin-bottom: 16px; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <header>
+        <h1><i class="fas fa-screwdriver-wrench"></i> Tipos de Serviço</h1>
+        <div style="display: flex; gap: 10px;">
+            <a href="{{ url_for('cliente.listar_clientes') }}" class="btn btn-outline">
+                <i class="fas fa-arrow-left"></i> Voltar
+            </a>
+            <a href="{{ url_for('servico.novo_tipo') }}" class="btn btn-success">
+                <i class="fas fa-plus"></i> Novo Tipo
+            </a>
+        </div>
+    </header>
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% for category, message in messages %}
+            <div class="flash-{{ category }}"><i class="fas fa-circle-info"></i> {{ message }}</div>
+        {% endfor %}
+    {% endwith %}
+
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Nome do Serviço</th>
+                <th>Prazo de Validade</th>
+                <th>Descrição</th>
+                <th>Ações</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for tipo in tipos %}
+            <tr>
+                <td>#{{ tipo.id }}</td>
+                <td>{{ tipo.nome }}</td>
+                <td><span class="prazo-badge"><i class="fas fa-clock"></i> {{ tipo.prazo_dias }} dias</span></td>
+                <td style="color:#64748b;">{{ tipo.descricao or '—' }}</td>
+                <td>
+                    <a href="{{ url_for('servico.editar_tipo', id=tipo.id) }}" class="action-link">
+                        <i class="fas fa-edit"></i> Editar
+                    </a>
+                    <form action="{{ url_for('servico.excluir_tipo', id=tipo.id) }}" method="POST" style="display:inline;" onsubmit="return confirm('Excluir este tipo de serviço?')">
+                        <button type="submit" style="background:none; border:none; cursor:pointer;" class="action-link-danger">
+                            <i class="fas fa-trash"></i> Excluir
+                        </button>
+                    </form>
+                </td>
+            </tr>
+            {% else %}
+            <tr>
+                <td colspan="5" style="text-align: center; padding: 50px; color: #94a3b8;">Nenhum tipo de serviço cadastrado.</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+</body>
+</html>
