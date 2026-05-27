@@ -7,8 +7,13 @@ app = Flask(__name__)
 app.secret_key = "chave_mestra"
 
 # 1. Configuração de conexão com o SQL Server
-app.config['SQLALCHEMY_DATABASE_URI'] = r'mssql+pyodbc://.\SQLEXPRESS/crm_faculdade?driver=ODBC+Driver+17+for+SQL+Server&trusted_connection=yes&Encrypt=no&TrustServerCertificate=yes'
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False  
+# Comente (coloque um # na frente) ou apague a linha do SQL Server:
+# app.config['SQLALCHEMY_DATABASE_URI'] = r'mssql+pyodbc://.\SQLEXPRESS/crm_faculdade...'
+
+# E adicione esta linha nova do SQLite:
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///banco_crm.db'
+
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 # 2. Configuração de conexão com o MySQL
 #app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://root:Teste%40123@localhost/crm_faculdade'
