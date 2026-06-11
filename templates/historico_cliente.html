@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CRM | Histórico — {{ cliente.nome }}</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root { --primary: #2563eb; --green: #16a34a; --bg: #f1f5f9; --card: #fff; --text: #1e293b; --muted: #64748b; --border: #e2e8f0; }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); padding: 24px; }
+        .topbar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; flex-wrap: wrap; gap: 12px; }
+        .topbar h1 { font-size: 1.4rem; font-weight: 700; display: flex; align-items: center; gap: 10px; }
+        .btn { padding: 9px 18px; border-radius: 8px; border: none; cursor: pointer; font-weight: 600;
+               font-size: 0.88rem; display: inline-flex; align-items: center; gap: 7px; text-decoration: none; transition: 0.2s; }
+        .btn-outline  { border: 1.5px solid var(--border); background: white; color: var(--muted); }
+        .btn-primary  { background: var(--primary); color: white; }
+
+        .layout { display: grid; grid-template-columns: 1fr 340px; gap: 20px; align-items: start; }
+        @media (max-width: 768px) { .layout { grid-template-columns: 1fr; } }
+
+        .card { background: var(--card); border-radius: 12px; padding: 24px; box-shadow: 0 2px 8px rgba(0,0,0,0.06); }
+        .card-title { font-size: 1rem; font-weight: 700; margin-bottom: 18px; display: flex; align-items: center; gap: 8px; }
+
+        /* Timeline de notas */
+        .timeline { display: flex; flex-direction: column; gap: 14px; }
+        .nota { border-left: 3px solid var(--primary); padding: 12px 16px; background: #f8fafc; border-radius: 0 8px 8px 0; }
+        .nota-data { font-size: 0.75rem; color: var(--muted); margin-bottom: 5px; }
+        .nota-texto { font-size: 0.92rem; line-height: 1.5; }
+        .empty { text-align: center; padding: 40px; color: var(--muted); font-size: 0.9rem; }
+
+        /* Formulário de nova nota */
+        textarea { width: 100%; padding: 12px; border: 1.5px solid var(--border); border-radius: 8px;
+                   font-family: inherit; font-size: 0.92rem; resize: vertical; outline: none; transition: 0.2s; }
+        textarea:focus { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(37,99,235,0.1); }
+        .btn-primary:hover { background: #1d4ed8; }
+
+        .flash-success { background: #dcfce7; color: #166534; padding: 12px 16px; border-radius: 8px; margin-bottom: 16px; font-size: 0.9rem; }
+        .flash-error   { background: #fee2e2; color: #991b1b; padding: 12px 16px; border-radius: 8px; margin-bottom: 16px; font-size: 0.9rem; }
+
+        /* Info do cliente */
+        .cliente-info { display: flex; flex-direction: column; gap: 8px; margin-bottom: 20px; }
+        .info-row { display: flex; gap: 8px; align-items: center; font-size: 0.88rem; }
+        .info-row i { color: var(--muted); width: 16px; }
+    </style>
+</head>
+<body>
+
+<div class="topbar">
+    <h1><i class="fas fa-comment-dots" style="color:var(--primary)"></i> Histórico: {{ cliente.nome }}</h1>
+    <a href="{{ url_for('alertas.dashboard') }}" class="btn btn-outline"><i class="fas fa-arrow-left"></i> Dashboard</a>
+</div>
+
+{% with messages = get_flashed_messages(with_categories=true) %}
+    {% for category, message in messages %}
+        <div class="flash-{{ category }}"><i class="fas fa-circle-info"></i> {{ message }}</div>
+    {% endfor %}
+{% endwith %}
+
+<div class="layout">
+
+    <!-- Coluna esquerda: timeline de notas -->
+    <div class="card">
+        <div class="card-title"><i class="fas fa-history" style="color:var(--primary)"></i> Notas de Atendimento</div>
+        {% if notas %}
+        <div class="timeline">
+            {% for nota in notas %}
+            <div class="nota">
+                <div class="nota-data"><i class="fas fa-calendar-alt"></i> {{ nota.data.strftime('%d/%m/%Y') }}</div>
+                <div class="nota-texto">{{ nota.texto }}</div>
+            </div>
+            {% endfor %}
+        </div>
+        {% else %}
+        <div class="empty">
+            <i class="fas fa-comment-slash" style="font-size:2rem;display:block;margin-bottom:10px;"></i>
+            Nenhuma nota registrada ainda.<br>Use o formulário ao lado para adicionar a primeira.
+        </div>
+        {% endif %}
+    </div>
+
+    <!-- Coluna direita: info + formulário -->
+    <div style="display:flex;flex-direction:column;gap:16px;">
+
+        <!-- Info do cliente -->
+        <div class="card">
+            <div class="card-title"><i class="fas fa-user" style="color:var(--muted)"></i> Dados do Cliente</div>
+            <div class="cliente-info">
+                <div class="info-row"><i class="fas fa-user"></i> <span>{{ cliente.nome }}</span></div>
+                <div class="info-row"><i class="fas fa-phone"></i> <span>{{ cliente.telefone or '—' }}</span></div>
+                <div class="info-row"><i class="fas fa-envelope"></i> <span>{{ cliente.email or '—' }}</span></div>
+            </div>
+        </div>
+
+        <!-- Nova nota -->
+        <div class="card">
+            <div class="card-title"><i class="fas fa-plus-circle" style="color:var(--green)"></i> Registrar Nova Nota</div>
+            <form action="{{ url_for('alertas.nova_nota', cliente_id=cliente.id) }}" method="POST">
+                <textarea name="texto" rows="5" placeholder='Ex: "Pediu para retornar na sexta", "Demonstrou interesse em renovar", "Não atendeu, tentar novamente"...' required></textarea>
+                <button type="submit" class="btn btn-primary" style="margin-top:12px;width:100%;justify-content:center;">
+                    <i class="fas fa-save"></i> Salvar Nota
+                </button>
+            </form>
+        </div>
+
+    </div>
+</div>
+
+</body>
+</html>

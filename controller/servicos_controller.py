@@ -89,12 +89,16 @@ def novo_servico():
         # RN06 - vencimento calculado automaticamente
         data_vencimento = data_execucao + timedelta(days=tipo.prazo_dias)
 
+        valor_raw = request.form.get('valor', '').strip()
+        valor = float(valor_raw.replace(',', '.')) if valor_raw else None
+
         servico = ServicoCliente(
             cliente_id      = cliente_id,
             tipo_servico_id = tipo_servico_id,
             data_execucao   = data_execucao,
             data_vencimento = data_vencimento,
-            status          = 'Ativo'
+            status          = 'Ativo',
+            valor           = valor
         )
         db.session.add(servico)
         db.session.commit()

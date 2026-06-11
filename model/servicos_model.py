@@ -22,6 +22,7 @@ class ServicoCliente(db.Model):
     data_execucao   = db.Column(db.Date, nullable=False)
     data_vencimento = db.Column(db.Date, nullable=False)  # Calculado pelo back-end (RN06)
     status          = db.Column(db.String(20), default='Ativo')  # Ativo / Renovado / Concluido
+    valor           = db.Column(db.Numeric(10, 2), nullable=True)  # Valor cobrado pelo serviço
 
     cliente = db.relationship('Cliente', backref='servicos', lazy=True)
 

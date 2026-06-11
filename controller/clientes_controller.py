@@ -64,11 +64,11 @@ def editar_cliente(id):
         cliente.nome = request.form['nome']
         cliente.email = request.form['email']
         cliente.telefone = request.form['telefone']
-        cliente.endereco = request.form['endereco'] # Se tiver esse campo no seu Model
+        cliente.cep = request.form['cep'] # Se tiver esse campo no seu Model
 
         # 3. Salva as alterações
         db.session.commit()
-        return redirect(url_for('cliente_blueprint.listar_clientes')) # Redireciona para a lista
+        return redirect(url_for('cliente.listar_clientes')) # Redireciona para a lista
 
     # Se for GET, exibe a página de edição com os dados atuais
     return render_template('editar_cliente.html', cliente=cliente)
