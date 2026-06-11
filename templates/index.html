@@ -9,18 +9,25 @@
     <style>
         :root { --primary-color: #2563eb; --bg-color: #f8fafc; --card-bg: #ffffff; --text-main: #1e293b; --border-color: #e2e8f0; }
         body { font-family: 'Inter', sans-serif; background-color: var(--bg-color); color: var(--text-main); margin: 0; padding: 20px; }
-        .container { max-width: 1100px; margin: 0 auto; background: var(--card-bg); padding: 30px; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
-        header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; border-bottom: 2px solid var(--border-color); padding-bottom: 20px; }
+        .container { max-width: 1200px; margin: 0 auto; background: var(--card-bg); padding: 30px; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+        header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; border-bottom: 2px solid var(--border-color); padding-bottom: 20px; flex-wrap: wrap; gap: 10px; }
         .search-bar { display: flex; gap: 10px; margin-bottom: 25px; }
         .search-bar input { flex: 1; padding: 12px 15px; border: 1px solid var(--border-color); border-radius: 8px; }
-        .btn { padding: 10px 20px; border-radius: 8px; border: none; cursor: pointer; font-weight: 600; display: inline-flex; align-items: center; gap: 8px; text-decoration: none; transition: 0.2s; }
+        .btn { padding: 10px 20px; border-radius: 8px; border: none; cursor: pointer; font-weight: 600; display: inline-flex; align-items: center; gap: 8px; text-decoration: none; transition: 0.2s; font-size: 0.9rem; }
         .btn-primary { background-color: var(--primary-color); color: white; }
-        .btn-success { background-color: #16a34a; color: white; } /* Cor verde para cadastro */
+        .btn-success { background-color: #16a34a; color: white; }
         .btn-outline { border: 1px solid var(--border-color); background: white; color: #64748b; }
         table { width: 100%; border-collapse: collapse; }
         th { background-color: #f1f5f9; text-align: left; padding: 15px; color: #64748b; font-size: 0.8rem; text-transform: uppercase; }
-        td { padding: 15px; border-bottom: 1px solid var(--border-color); }
-        .action-link { color: var(--primary-color); text-decoration: none; font-weight: 600; }
+        td { padding: 12px 15px; border-bottom: 1px solid var(--border-color); vertical-align: middle; }
+        .action-link { text-decoration: none; font-weight: 600; font-size: 0.85rem; display: inline-flex; align-items: center; gap: 5px; padding: 5px 10px; border-radius: 6px; transition: 0.2s; }
+        .action-edit    { color: var(--primary-color); background: #eff6ff; }
+        .action-service { color: #16a34a; background: #f0fdf4; }
+        .action-history { color: #7c3aed; background: #f5f3ff; }
+        .action-edit:hover    { background: #dbeafe; }
+        .action-service:hover { background: #dcfce7; }
+        .action-history:hover { background: #ede9fe; }
+        .actions-cell { display: flex; gap: 8px; flex-wrap: wrap; }
     </style>
 </head>
 <body>
@@ -31,6 +38,12 @@
         <a href="{{ url_for('cliente.cadastrar_cliente') }}" class="btn btn-success">
             <i class="fas fa-user-plus"></i> Novo Cliente
         </a>
+        <a href="{{ url_for('alertas.dashboard') }}" class="btn btn-primary" style="background:#7c3aed;">
+            <i class="fas fa-chart-pie"></i> Dashboard
+        </a>
+        <a href="{{ url_for('servico.novo_servico') }}" class="btn btn-success">
+            <i class="fas fa-plus-circle"></i> Vincular Serviço
+        </a>
         <a href="{{ url_for('servico.listar_tipos') }}" class="btn btn-outline">
             <i class="fas fa-screwdriver-wrench"></i> Tipos de Serviço
         </a>
@@ -38,7 +51,7 @@
 
     <div class="search-bar">
         <form action="{{ url_for('cliente.listar_clientes') }}" method="GET" style="display: flex; flex: 1; gap: 10px;">
-            <input type="text" name="search" placeholder="Buscar cliente..." value="{{ busca }}">
+            <input type="text" name="search" placeholder="Buscar cliente por nome ou telefone..." value="{{ busca }}">
             <button type="submit" class="btn btn-primary"><i class="fas fa-search"></i> Buscar</button>
             {% if busca %}
                 <a href="{{ url_for('cliente.listar_clientes') }}" class="btn btn-outline">Limpar</a>
@@ -64,9 +77,14 @@
                 <td>{{ cliente.email }}</td>
                 <td>{{ cliente.telefone }}</td>
                 <td>
-                    <a href="{{ url_for('cliente.editar_cliente', id=cliente.id) }}" class="action-link">
-                        <i class="fas fa-edit"></i> Editar
-                    </a>
+                    <div class="actions-cell">
+                        <a href="{{ url_for('cliente.editar_cliente', id=cliente.id) }}" class="action-link action-edit">
+                            <i class="fas fa-edit"></i> Editar
+                        </a>
+                        <a href="{{ url_for('alertas.ver_historico', cliente_id=cliente.id) }}" class="action-link action-history">
+                            <i class="fas fa-comment-dots"></i> Histórico
+                        </a>
+                    </div>
                 </td>
             </tr>
             {% else %}
