@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CRM | Editar Cliente</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        :root {
+            --primary-color: #2563eb; 
+            --primary-hover: #1d4ed8;
+            --bg-color: #f1f5f9;
+            --text-main: #1e293b;
+            --border-color: #e2e8f0;
+            --white: #ffffff;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 40px 20px;
+        }
+
+        .card {
+            background: var(--white);
+            width: 100%;
+            max-width: 700px;
+            padding: 40px;
+            border-radius: 16px;
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
+        }
+
+        .card-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .card-header i {
+            font-size: 3rem;
+            color: var(--primary-color);
+            margin-bottom: 10px;
+        }
+
+        .card-header h2 {
+            margin: 0;
+            font-size: 1.5rem;
+            color: var(--text-main);
+        }
+
+        .card-header p {
+            color: #64748b;
+            font-size: 0.9rem;
+            margin-top: 5px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            font-size: 0.85rem;
+            color: #475569;
+        }
+
+        .input-wrapper {
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
+
+        .input-wrapper i {
+            position: absolute;
+            left: 12px;
+            color: #94a3b8;
+        }
+
+        input, textarea {
+            width: 100%;
+            padding: 12px 12px 12px 40px;
+            border: 1.5px solid var(--border-color);
+            border-radius: 8px;
+            font-size: 0.95rem;
+            transition: all 0.3s ease;
+            outline: none;
+            background-color: #fcfcfc;
+            box-sizing: border-box;
+        }
+
+        textarea {
+            padding-left: 12px;
+        }
+
+        input:focus, textarea:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.1);
+            background-color: #fff;
+        }
+
+        /* Botões */
+        .btn-group {
+            display: flex;
+            gap: 12px;
+            margin-top: 30px;
+        }
+
+        .btn {
+            flex: 1;
+            padding: 14px;
+            border-radius: 8px;
+            border: none;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 8px;
+            transition: 0.2s;
+            text-decoration: none;
+            font-size: 1rem;
+        }
+
+        .btn-save {
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        .btn-save:hover {
+            background-color: var(--primary-hover);
+        }
+
+        .btn-cancel {
+            background-color: #f8fafc;
+            color: #64748b;
+            border: 1.5px solid var(--border-color);
+        }
+
+        .btn-cancel:hover {
+            background-color: #f1f5f9;
+        }
+
+        .id-badge {
+            display: inline-block;
+            background: #e0e7ff;
+            color: #4338ca;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+
+<div class="card">
+    <div class="card-header">
+        <i class="fas fa-user-edit"></i>
+        <h2>Editar Dados do Cliente</h2>
+        <p>Atualizando registro <span class="id-badge">#{{ cliente.id }}</span></p>
+    </div>
+    
+    <form method="POST">
+        <div class="form-group">
+            <label for="nome">Nome Completo</label>
+            <div class="input-wrapper">
+                <i class="fas fa-user"></i>
+                <input type="text" id="nome" name="nome" value="{{ cliente.nome }}" required>
+            </div>
+        </div>
+        
+        <div class="form-group">
+            <label for="email">E-mail de Contato</label>
+            <div class="input-wrapper">
+                <i class="fas fa-envelope"></i>
+                <input type="email" id="email" name="email" value="{{ cliente.email }}" required>
+            </div>
+        </div>
+        
+        <div class="form-group">
+            <label for="telefone">Telefone / WhatsApp</label>
+            <div class="input-wrapper">
+                <i class="fas fa-phone"></i>
+                <input type="text" id="telefone" name="telefone" value="{{ cliente.telefone }}">
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="cep">CEP Cadastrado</label>
+            <textarea id="cep" name="cep" rows="1">{{ cliente.cep }}</textarea>
+        </div>
+
+        <div class="btn-group">
+            <button type="submit" class="btn btn-save">
+                <i class="fas fa-save"></i> Salvar Alterações
+            </button>
+            <a href="{{ url_for('cliente.listar_clientes') }}" class="btn btn-cancel">
+                Cancelar
+            </a>
+        </div>
+    </form>
+
+    <div style="margin-top: 40px; border-top: 2px solid var(--border-color); padding-top: 20px;">
+        <h3 style="color: var(--text-main); margin-bottom: 15px;">
+            <i class="fas fa-history" style="color: var(--primary-color);"></i> Histórico de Serviços
+        </h3>
+        
+        <table style="width: 100%; border-collapse: collapse; font-size: 0.9rem;">
+            <thead>
+                <tr style="background-color: #f8fafc; text-align: left; color: #64748b;">
+                    <th style="padding: 10px; border-bottom: 1px solid var(--border-color);">Serviço</th>
+                    <th style="padding: 10px; border-bottom: 1px solid var(--border-color);">Executado em</th>
+                    <th style="padding: 10px; border-bottom: 1px solid var(--border-color);">Vence em</th>
+                    <th style="padding: 10px; border-bottom: 1px solid var(--border-color);">Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for servico in cliente.servicos %}
+                <tr>
+                    <td style="padding: 10px; border-bottom: 1px solid var(--border-color); font-weight: 600;">{{ servico.tipo.nome }}</td>
+                    <td style="padding: 10px; border-bottom: 1px solid var(--border-color);">{{ servico.data_execucao.strftime('%d/%m/%Y') }}</td>
+                    <td style="padding: 10px; border-bottom: 1px solid var(--border-color);">{{ servico.data_vencimento.strftime('%d/%m/%Y') }}</td>
+                    <td style="padding: 10px; border-bottom: 1px solid var(--border-color);">
+                        {% if servico.situacao == 'vencido' %}
+                            <span style="background: #fee2e2; color: #991b1b; padding: 3px 8px; border-radius: 12px; font-weight: bold;">Vencido</span>
+                        {% elif servico.situacao == 'critico' %}
+                            <span style="background: #fef08a; color: #854d0e; padding: 3px 8px; border-radius: 12px; font-weight: bold;">Crítico</span>
+                        {% elif servico.situacao == 'a_vencer' %}
+                            <span style="background: #e0f2fe; color: #075985; padding: 3px 8px; border-radius: 12px; font-weight: bold;">A Vencer</span>
+                        {% else %}
+                            <span style="background: #dcfce7; color: #166534; padding: 3px 8px; border-radius: 12px; font-weight: bold;">OK</span>
+                        {% endif %}
+                    </td>
+                </tr>
+                {% else %}
+                <tr>
+                    <td colspan="4" style="padding: 20px; text-align: center; color: #94a3b8; border-bottom: 1px solid var(--border-color);">
+                        Nenhum serviço registrado para este cliente.
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    </div>
+
+</body>
+</html>

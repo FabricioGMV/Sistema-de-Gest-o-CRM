@@ -1,8 +1,16 @@
 .venv/
-
+env/
+.env
 __pycache__/
 *.pyc
+*$py.class
+*.py[cod]
+
 instance/
-.env
+.vscode/
 
 *.db
+
+Thumbs.db
+.DS_Store
+*.log

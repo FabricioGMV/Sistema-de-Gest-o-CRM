@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CRM | Gestão de Clientes</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root { --primary-color: #2563eb; --bg-color: #f8fafc; --card-bg: #ffffff; --text-main: #1e293b; --border-color: #e2e8f0; }
+        body { font-family: 'Inter', sans-serif; background-color: var(--bg-color); color: var(--text-main); margin: 0; padding: 20px; }
+        .container { max-width: 1100px; margin: 0 auto; background: var(--card-bg); padding: 30px; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+        header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; border-bottom: 2px solid var(--border-color); padding-bottom: 20px; }
+        .search-bar { display: flex; gap: 10px; margin-bottom: 25px; }
+        .search-bar input { flex: 1; padding: 12px 15px; border: 1px solid var(--border-color); border-radius: 8px; }
+        .btn { padding: 10px 20px; border-radius: 8px; border: none; cursor: pointer; font-weight: 600; display: inline-flex; align-items: center; gap: 8px; text-decoration: none; transition: 0.2s; }
+        .btn-primary { background-color: var(--primary-color); color: white; }
+        .btn-success { background-color: #16a34a; color: white; } 
+        .btn-outline { border: 1px solid var(--border-color); background: white; color: #64748b; }
+        table { width: 100%; border-collapse: collapse; }
+        th { background-color: #f1f5f9; text-align: left; padding: 15px; color: #64748b; font-size: 0.8rem; text-transform: uppercase; }
+        td { padding: 15px; border-bottom: 1px solid var(--border-color); }
+        .action-link { color: var(--primary-color); text-decoration: none; font-weight: 600; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <header>
+        <h1><i class="fas fa-briefcase"></i> Sistema Gestão CRM</h1>
+        
+        <div style="display: flex; gap: 10px;">
+            <a href="{{ url_for('cliente.cadastrar_cliente') }}" class="btn btn-success">
+                <i class="fas fa-user-plus"></i> Novo Cliente
+            </a>
+            <a href="{{ url_for('servico.listar_tipos') }}" class="btn btn-outline">
+                <i class="fas fa-screwdriver-wrench"></i> Tipos de Serviço
+            </a>
+            <a href="{{ url_for('servico.novo_servico') }}" class="btn btn-primary">
+                <i class="fas fa-clipboard-check"></i> Lançar Serviço
+            </a>
+        </div>
+    </header>
+
+    <div class="search-bar">
+        <form action="{{ url_for('cliente.listar_clientes') }}" method="GET" style="display: flex; flex: 1; gap: 10px;">
+            <input type="text" name="search" placeholder="Buscar cliente..." value="{{ busca }}">
+            <button type="submit" class="btn btn-primary"><i class="fas fa-search"></i> Buscar</button>
+            {% if busca %}
+                <a href="{{ url_for('cliente.listar_clientes') }}" class="btn btn-outline">Limpar</a>
+            {% endif %}
+        </form>
+    </div>
+
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Nome</th>
+                <th>E-mail</th>
+                <th>Telefone</th>
+                <th>Ações</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for cliente in clientes %}
+            <tr>
+                <td>#{{ cliente.id }}</td>
+                <td>{{ cliente.nome }}</td>
+                <td>{{ cliente.email }}</td>
+                <td>{{ cliente.telefone }}</td>
+                <td>
+                    <a href="{{ url_for('cliente.editar_cliente', id=cliente.id) }}" class="action-link">
+                        <i class="fas fa-edit"></i> Editar
+                    </a>
+                </td>
+            </tr>
+            {% else %}
+            <tr>
+                <td colspan="5" style="text-align: center; padding: 50px; color: #94a3b8;">Nenhum cliente cadastrado.</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+</body>
+</html>
