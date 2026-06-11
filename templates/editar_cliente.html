@@ -9,7 +9,7 @@
     
     <style>
         :root {
-            --primary-color: #2563eb; /* Azul para Edição */
+            --primary-color: #2563eb; 
             --primary-hover: #1d4ed8;
             --bg-color: #f1f5f9;
             --text-main: #1e293b;
@@ -26,12 +26,13 @@
             align-items: center;
             min-height: 100vh;
             margin: 0;
+            padding: 40px 20px;
         }
 
         .card {
             background: var(--white);
             width: 100%;
-            max-width: 550px;
+            max-width: 700px;
             padding: 40px;
             border-radius: 16px;
             box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
@@ -60,7 +61,6 @@
             margin-top: 5px;
         }
 
-        /* Estilização dos Campos */
         .form-group {
             margin-bottom: 20px;
         }
@@ -94,6 +94,7 @@
             transition: all 0.3s ease;
             outline: none;
             background-color: #fcfcfc;
+            box-sizing: border-box;
         }
 
         textarea {
@@ -148,7 +149,6 @@
             background-color: #f1f5f9;
         }
 
-        /* Badge para o ID */
         .id-badge {
             display: inline-block;
             background: #e0e7ff;
@@ -208,7 +208,50 @@
             </a>
         </div>
     </form>
-</div>
+
+    <div style="margin-top: 40px; border-top: 2px solid var(--border-color); padding-top: 20px;">
+        <h3 style="color: var(--text-main); margin-bottom: 15px;">
+            <i class="fas fa-history" style="color: var(--primary-color);"></i> Histórico de Serviços
+        </h3>
+        
+        <table style="width: 100%; border-collapse: collapse; font-size: 0.9rem;">
+            <thead>
+                <tr style="background-color: #f8fafc; text-align: left; color: #64748b;">
+                    <th style="padding: 10px; border-bottom: 1px solid var(--border-color);">Serviço</th>
+                    <th style="padding: 10px; border-bottom: 1px solid var(--border-color);">Executado em</th>
+                    <th style="padding: 10px; border-bottom: 1px solid var(--border-color);">Vence em</th>
+                    <th style="padding: 10px; border-bottom: 1px solid var(--border-color);">Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for servico in cliente.servicos %}
+                <tr>
+                    <td style="padding: 10px; border-bottom: 1px solid var(--border-color); font-weight: 600;">{{ servico.tipo.nome }}</td>
+                    <td style="padding: 10px; border-bottom: 1px solid var(--border-color);">{{ servico.data_execucao.strftime('%d/%m/%Y') }}</td>
+                    <td style="padding: 10px; border-bottom: 1px solid var(--border-color);">{{ servico.data_vencimento.strftime('%d/%m/%Y') }}</td>
+                    <td style="padding: 10px; border-bottom: 1px solid var(--border-color);">
+                        {% if servico.situacao == 'vencido' %}
+                            <span style="background: #fee2e2; color: #991b1b; padding: 3px 8px; border-radius: 12px; font-weight: bold;">Vencido</span>
+                        {% elif servico.situacao == 'critico' %}
+                            <span style="background: #fef08a; color: #854d0e; padding: 3px 8px; border-radius: 12px; font-weight: bold;">Crítico</span>
+                        {% elif servico.situacao == 'a_vencer' %}
+                            <span style="background: #e0f2fe; color: #075985; padding: 3px 8px; border-radius: 12px; font-weight: bold;">A Vencer</span>
+                        {% else %}
+                            <span style="background: #dcfce7; color: #166534; padding: 3px 8px; border-radius: 12px; font-weight: bold;">OK</span>
+                        {% endif %}
+                    </td>
+                </tr>
+                {% else %}
+                <tr>
+                    <td colspan="4" style="padding: 20px; text-align: center; color: #94a3b8; border-bottom: 1px solid var(--border-color);">
+                        Nenhum serviço registrado para este cliente.
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    </div>
 
 </body>
 </html>
